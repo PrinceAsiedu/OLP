@@ -1,0 +1,28 @@
+Using Fixtures to loaddata in to the database
+--------------------------------------------
+
+Fixtures are not only useful for setting up initial data, but also for
+providing sample data for your application or data required for
+your tests. By default, Django looks for files in the fixtures/ directory of each application, but
+you can specify the complete path to the fixture file for the loaddata command. You
+can also use the FIXTURE_DIRS setting to tell Django additional directories to look in
+for fixtures
+
+Creating Diverse Content
+------------------------
+The Content model created in courses.model represents the
+modules' contents, and defines a generic relation to associate 
+any kind of content with a module. A module contains multiple contents, so you define a
+ForeignKey field that points to the Module model. You also set up a generic relation
+to associate objects from different models that represent different types of content.
+
+Note: Remember that you need three different fields to set up a generic relation. In your
+Content model, these are:
+• content_type: A ForeignKey field to the ContentType model
+• object_id: A PositiveIntegerField to store the primary key of the related object
+• item: A GenericForeignKey field to the related object combining the two
+previous fields
+
+Only the content_type and object_id fields have a corresponding column in the
+database table of this model. The item field allows you to retrieve or set the related
+object directly, and its functionality is built on top of the other two fields.

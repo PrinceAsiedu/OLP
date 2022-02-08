@@ -1,0 +1,68 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>{% block title %}Outpost Learning{% endblock %}</title>
+  <link href="{% static "css/base.css" %}" rel="stylesheet">
+</head>
+<body>
+  <div id="header">
+    <a href="/" class="logo">Outpost Learning</a>
+    <ul class="menu">
+      {% if request.user.is_authenticated %}
+        <li><a href="{% url "logout" %}">{{user}} | Sign out</a></li>
+      {% else %}
+        <li><a href="{% url "login" %}">Sign in</a></li>
+      {% endif %}
+    </ul>
+  </div>
+  <div id="content">
+    {% block content %}
+    {% endblock %}
+  </div>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+  <script>
+    $(document).ready(function() {
+      {% block domready %} 
+        $('#modules').sortable({
+          stop: function(event, ui) {
+            modules_order = {};
+            $('#modules').children().each(function(){
+              // update the order field 
+              $(this).find('.order').text($(this).index() + 1);
+              // associate the module's id with its order
+              modules_order[$(this).data('id')] = $(this).index();
+            });
+            $.ajax({
+              type: 'POST',
+              url: '{% url "module_order" %}',
+              contentType: 'application/json; charset=utf-8',
+              dataType: 'json',
+              data: JSON.stringify(modules_order)
+            });
+          }
+        });
+        $('#modules-contents').sortable({
+          stop: function(event, ui) {
+            contents_order = {};
+            $('#modules-contents').children().each(function() {
+              // associate the module's id with its order
+              contents_order[$(this).data('id')] = $(this).index();
+            });
+            $.ajax({
+              type: 'POST',
+              url: '{% url "content_order" %}',
+              contentType: 'application/json; charset=utf-8',
+              dataType: 'json',
+              data: JSON.stringify(contents_order)
+            });
+          }
+        });
+      {% endblock %}
+    });
+  </script>
+</body>
+</html>
