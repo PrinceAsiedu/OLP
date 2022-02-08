@@ -8,14 +8,23 @@
 </head>
 <body>
   <div id="header">
-    <a href="/" class="logo">Outpost Learning</a>
-    <ul class="menu">
-      {% if request.user.is_authenticated %}
-        <li><a href="{% url "logout" %}">{{user}} | Sign out</a></li>
-      {% else %}
-        <li><a href="{% url "login" %}">Sign in</a></li>
-      {% endif %}
-    </ul>
+    <label class="logo" for="">Outpost Learning>_</label>
+    <div class="navbar">
+      <a href="">Home</a>
+      <a href="404/404.html">Courses</a>
+      <a href="404/404.html">Tutorials</a>
+      <a href="404/404.html">Support</a>
+      <div>
+          <input type="search" class="searchfield" name="searchfield" id="searchfield" placeholder="Type something...">
+      </div>
+      <ul class="menu">
+        {% if request.user.is_authenticated %}
+          <li><a href="{% url "logout" %}">{{user}} | Sign out</a></li>
+        {% else %}
+          <li><a href="{% url "login" %}">Sign in</a></li>
+        {% endif %}
+      </ul>
+    </div>
   </div>
   <div id="content">
     {% block content %}
