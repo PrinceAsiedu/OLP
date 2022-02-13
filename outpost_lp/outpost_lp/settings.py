@@ -25,9 +25,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = '546^r$l9krv9@c!^!8(gly@7taj*3345u0g%t08xl@9fn_gi&u'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1'] 
+ALLOWED_HOSTS = [] 
 
 
 # Application definition
@@ -44,6 +44,8 @@ INSTALLED_APPS = [
     'embed_video',
     'memcache_status',
     'rest_framework',
+    'chat',
+    'channels',
 ]
 
 MIDDLEWARE = [
@@ -159,3 +161,16 @@ REST_FRAMEWORK = {
     ],
 }
 
+# ASGI
+ASGI_APPLICATION = 'outpost_lp.routing.application'
+
+
+#Channels 
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            'hosts': [('127.0.0.1', 6379)],
+        },
+    },
+}

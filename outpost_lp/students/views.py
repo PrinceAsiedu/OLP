@@ -1,12 +1,13 @@
 from django.urls import reverse_lazy
 from django.views.generic.edit import CreateView, FormView
-from django.views.generic.detail import DetailView
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.mixins import LoginRequiredMixin
-from .forms import CourseEnrollForm
 from django.views.generic.list import ListView
+from django.views.generic.detail import DetailView
 from courses.models import Course
+from .forms import CourseEnrollForm
+
 
 class StudentRegistrationView(CreateView):
     template_name = 'students/student/registration.html'
@@ -16,7 +17,8 @@ class StudentRegistrationView(CreateView):
     def form_valid(self, form):
         result = super().form_valid(form)
         cd = form.cleaned_data
-        user = authenticate(username=cd['username'], password=cd['password1'])
+        user = authenticate(username=cd['username'],
+                            password=cd['password1'])
         login(self.request, user)
         return result
 
@@ -31,7 +33,8 @@ class StudentEnrollCourseView(LoginRequiredMixin, FormView):
         return super().form_valid(form)
 
     def get_success_url(self):
-        return reverse_lazy('student_course_detail', args=[self.course.id])
+        return reverse_lazy('student_course_detail',
+                            args=[self.course.id])
 
 
 class StudentCourseListView(LoginRequiredMixin, ListView):
@@ -57,7 +60,8 @@ class StudentCourseDetailView(DetailView):
         course = self.get_object()
         if 'module_id' in self.kwargs:
             # get current module
-            context['module'] = course.modules.get(id=self.kwargs['module_id'])
+            context['module'] = course.modules.get(
+                id=self.kwargs['module_id'])
         else:
             # get first module
             context['module'] = course.modules.all()[0]
